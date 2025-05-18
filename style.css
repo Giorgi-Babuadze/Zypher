@@ -1,0 +1,121 @@
+/* General Styles */
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #3f51b5, #9c27b0);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Header Styles */
+header {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+#settings {
+    position: relative;
+}
+
+#settings-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+#settings-menu {
+    position: absolute;
+    top: 2rem;
+    right: 0;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: none;
+}
+
+#settings-menu.hidden {
+    display: none;
+}
+
+#settings-menu label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+/* Search Section */
+#search-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+#search-bar {
+    width: 20rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 2rem;
+    font-size: 1rem;
+    outline: none;
+}
+
+#search-btn {
+    background: #fff;
+    color: #3f51b5;
+    border: none;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#search-btn:hover {
+    background: #f1f1f1;
+}
+
+/* Quick Links */
+#quick-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#quick-links a {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    color: #fff;
+    transition: background 0.3s;
+}
+
+#quick-links a:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* Footer */
+footer {
+    position: absolute;
+    bottom: 1rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.7);
+}

@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Zypher - A modern browser start page">
+    <meta name="theme-color" content="#3f51b5">
+    <title>Zypher</title>
+    <link rel="icon" href="favicon.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: 'Roboto', 'Poppins', 'Inter', sans-serif;
+            background: linear-gradient(120deg, #3f51b5 0%, #6a5acd 50%, #9c27b0 100%);
+            color: #f5f6fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            transition: background 0.5s;
+        }
+
+        #app {
+            width: 100vw;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-family: 'Poppins', 'Roboto', sans-serif;
+            font-size: 2.7rem;
+            letter-spacing: 0.1em;
+            font-weight: 700;
+            background: linear-gradient(90deg, #fff 30%, #b39ddb 70%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+        }
+
+        /* Header Styles */
+        header {
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 2rem 2.5vw 0 2.5vw;
+            box-sizing: border-box;
+        }
+
+        #account {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        #avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #fff;
+            object-fit: cover;
+            border: 2px solid #9c27b0;
+            box-shadow: 0 2px 8px rgba(60,40,120,0.12);
+        }
+
+        #account-name {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #fff;
+        }
+
+        #login-btn, #logout-btn {
+            background: linear-gradient(90deg, #6a5acd, #9c27b0);
+            color: #fff;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.4rem 1.2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(60,40,120,0.10);
+            transition: background 0.2s;
+        }
+
+        #login-btn:hover, #logout-btn:hover {
+            background: linear-gradient(90deg, #9c27b0, #6a5acd);
+        }
+
+        #settings {
+            position: relative;
+        }
+
+        #settings-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            margin-left: 1.5rem;
+        }
+
+        #settings-menu {
+            position: absolute;
+            top: 2.5rem;
+            right: 0;
+            background: #23234a;
+            color: #fff;
+            min-width: 220px;
+            border-radius: 1rem;
+            box-shadow: 0 8px 32px rgba(60,40,120,0.18);
+            padding: 1.2rem 1rem 1rem 1rem;
+            z-index: 10;
+            display: none;
+        }
+
+        #settings-menu.show {
+            display: block;
+        }
+
+        #settings-menu label, #settings-menu button, #settings-menu select {
+            display: block;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        #settings-menu select {
+            width: 100%;
+            padding: 0.3rem;
+            border-radius: 0.5rem;
+            border: none;
+            margin-top: 0.3rem;
+        }
+
+        /* Grid/List toggle for quick links */
+        #quick-links.grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1.2rem;
+        }
+
+        #quick-links.list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+
+        /* Search Section */
+        #search-container {
+            margin: 7vh auto 2rem auto;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            background: rgba(255,255,255,0.10);
+            border-radius: 2.5rem;
+            box-shadow: 0 4px 24px rgba(60,40,120,0.10);
+            padding: 0.5rem 1.2rem;
+            width: 95vw;
+            max-width: 520px;
+        }
+
+        #search-bar {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 1.25rem;
+            color: #fff;
+            padding: 0.7rem 0.5rem;
+        }
+
+        #search-btn {
+            background: linear-gradient(90deg, #6a5acd, #9c27b0);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 2.7rem;
+            height: 2.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(60,40,120,0.10);
+            transition: background 0.2s;
+        }
+
+        #search-btn:hover {
+            background: linear-gradient(90deg, #9c27b0, #6a5acd);
+        }
+
+        /* Quick Links */
+        #quick-links {
+            display: flex;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 2.5rem;
+            transition: gap 0.3s, margin 0.3s;
+        }
+
+        #quick-links a {
+            background: rgba(255,255,255,0.18);
+            padding: 0.7rem 1.2rem;
+            border-radius: 0.7rem;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 500;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 8px rgba(60,40,120,0.08);
+            transition: background 0.2s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        #quick-links a:hover {
+            background: rgba(156,39,176,0.25);
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        #add-link-btn {
+            background: linear-gradient(90deg, #6a5acd, #9c27b0);
+            color: #fff;
+            border: none;
+            border-radius: 0.7rem;
+            padding: 0.7rem 1.2rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(60,40,120,0.10);
+            transition: background 0.2s, transform 0.2s;
+            margin-left: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        #add-link-btn:hover {
+            background: linear-gradient(90deg, #9c27b0, #6a5acd);
+            transform: scale(1.07);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: auto;
+            text-align: center;
+            font-size: 1rem;
+            color: #bdbdbd;
+            padding: 2rem 0 1rem 0;
+            width: 100vw;
+        }
+
+        /* Modal Styles */
+        #modal-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(60,40,120,0.25);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #modal {
+            background: #23234a;
+            color: #fff;
+            border-radius: 1.2rem;
+            box-shadow: 0 8px 32px rgba(60,40,120,0.18);
+            padding: 2.5rem 2rem 2rem 2rem;
+            min-width: 320px;
+            max-width: 90vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #modal h2 {
+            margin-top: 0;
+            margin-bottom: 1.2rem;
+            font-size: 1.5rem;
+        }
+
+        #modal input {
+            width: 100%;
+            padding: 0.7rem;
+            margin-bottom: 1rem;
+            border-radius: 0.7rem;
+            border: none;
+            font-size: 1.1rem;
+        }
+
+        #modal button {
+            background: linear-gradient(90deg, #6a5acd, #9c27b0);
+            color: #fff;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.5rem 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+
+        #modal button:hover {
+            background: linear-gradient(90deg, #9c27b0, #6a5acd);
+        }
+
+        /* Add Link Modal */
+        #add-link-modal-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(60,40,120,0.25);
+            z-index: 101;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #add-link-modal {
+            background: #23234a;
+            color: #fff;
+            border-radius: 1.2rem;
+            box-shadow: 0 8px 32px rgba(60,40,120,0.18);
+            padding: 2rem 1.5rem 1.5rem 1.5rem;
+            min-width: 320px;
+            max-width: 90vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeIn 0.3s;
+        }
+
+        #add-link-modal h2 {
+            margin-top: 0;
+            margin-bottom: 1.2rem;
+            font-size: 1.3rem;
+        }
+
+        #add-link-modal input {
+            width: 100%;
+            padding: 0.7rem;
+            margin-bottom: 1rem;
+            border-radius: 0.7rem;
+            border: none;
+            font-size: 1.1rem;
+        }
+
+        #add-link-modal button {
+            background: linear-gradient(90deg, #6a5acd, #9c27b0);
+            color: #fff;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.5rem 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: background 0.2s;
+        }
+
+        #add-link-modal button:hover {
+            background: linear-gradient(90deg, #9c27b0, #6a5acd);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 600px) {
+            #search-container { max-width: 98vw; }
+            #modal { min-width: 90vw; }
+            h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Header Section -->
+        <header>
+            <h1>Zypher</h1>
+            <div id="account">
+                <img id="avatar" src="https://ui-avatars.com/api/?name=Z&background=6a5acd&color=fff" alt="Avatar">
+                <span id="account-name">Guest</span>
+                <button id="login-btn">Sign In</button>
+                <button id="logout-btn" style="display:none;">Sign Out</button>
+            </div>
+            <div id="settings">
+                <button id="settings-btn" aria-label="Settings">&#9881;</button>
+                <div id="settings-menu">
+                    <label><input type="checkbox" id="theme-toggle"> Dark Mode</label>
+                    <label>Font:
+                        <select id="font-select">
+                            <option value="Roboto">Roboto</option>
+                            <option value="Poppins">Poppins</option>
+                            <option value="Inter">Inter</option>
+                        </select>
+                    </label>
+                    <label>Quick Links Layout:
+                        <select id="ql-layout">
+                            <option value="grid">Grid</option>
+                            <option value="list">List</option>
+                        </select>
+                    </label>
+                    <label>Search Engine:
+                        <select id="search-engine">
+                            <option value="https://www.google.com/search?q=">Google</option>
+                            <option value="https://www.bing.com/search?q=">Bing</option>
+                            <option value="https://search.brave.com/search?q=">Brave</option>
+                        </select>
+                    </label>
+                    <button id="clear-data">Clear Data</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Search Section -->
+        <main>
+            <div id="search-container">
+                <input type="text" id="search-bar" placeholder="Search the web...">
+                <button id="search-btn" aria-label="Search">&#128269;</button>
+            </div>
+            <div id="quick-links"></div>
+            <button id="add-link-btn" title="Add Quick Link">➕ Add Link</button>
+        </main>
+
+        <!-- Footer Section -->
+        <footer>
+            <p>&copy; 2025 Zypher. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Modal for Login/Signup -->
+    <div id="modal-bg">
+        <div id="modal">
+            <h2 id="modal-title">Sign In</h2>
+            <input type="text" id="modal-username" placeholder="Username">
+            <input type="password" id="modal-password" placeholder="Password">
+            <button id="modal-action">Sign In</button>
+            <button id="modal-switch">No account? Sign Up</button>
+        </div>
+    </div>
+
+    <!-- Modal for Add Link -->
+    <div id="add-link-modal-bg">
+        <div id="add-link-modal">
+            <h2>Add Quick Link</h2>
+            <input type="text" id="add-link-name" placeholder="Site Name (e.g. GitHub)">
+            <input type="url" id="add-link-url" placeholder="Site URL (e.g. https://github.com)">
+            <button id="add-link-save">Add</button>
+            <button id="add-link-cancel">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const searchBar = document.getElementById('search-bar');
+        const searchBtn = document.getElementById('search-btn');
+        const settingsBtn = document.getElementById('settings-btn');
+        const settingsMenu = document.getElementById('settings-menu');
+        const themeToggle = document.getElementById('theme-toggle');
+        const searchEngineSelect = document.getElementById('search-engine');
+        const clearDataBtn = document.getElementById('clear-data');
+        const quickLinks = document.getElementById('quick-links');
+        const avatar = document.getElementById('avatar');
+        const accountName = document.getElementById('account-name');
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const modalBg = document.getElementById('modal-bg');
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalUsername = document.getElementById('modal-username');
+        const modalPassword = document.getElementById('modal-password');
+        const modalAction = document.getElementById('modal-action');
+        const modalSwitch = document.getElementById('modal-switch');
+        const addLinkBtn = document.getElementById('add-link-btn');
+        const addLinkModalBg = document.getElementById('add-link-modal-bg');
+        const addLinkName = document.getElementById('add-link-name');
+        const addLinkUrl = document.getElementById('add-link-url');
+        const addLinkSave = document.getElementById('add-link-save');
+        const addLinkCancel = document.getElementById('add-link-cancel');
+        const fontSelect = document.getElementById('font-select');
+        const qlLayout = document.getElementById('ql-layout');
+
+        // Account System (localStorage, demo only)
+        function getUser() {
+            return JSON.parse(localStorage.getItem('zypherUser'));
+        }
+        function setUser(user) {
+            localStorage.setItem('zypherUser', JSON.stringify(user));
+        }
+        function clearUser() {
+            localStorage.removeItem('zypherUser');
+        }
+        function updateAccountUI() {
+            const user = getUser();
+            if (user) {
+                accountName.textContent = user.username;
+                avatar.src = user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.username)}&background=6a5acd&color=fff`;
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = '';
+            } else {
+                accountName.textContent = 'Guest';
+                avatar.src = 'https://ui-avatars.com/api/?name=Z&background=6a5acd&color=fff';
+                loginBtn.style.display = '';
+                logoutBtn.style.display = 'none';
+            }
+        }
+        loginBtn.onclick = () => {
+            modalBg.style.display = 'flex';
+            modalTitle.textContent = 'Sign In';
+            modalAction.textContent = 'Sign In';
+            modalSwitch.textContent = 'No account? Sign Up';
+            modalPassword.value = '';
+            modalUsername.value = '';
+        };
+        logoutBtn.onclick = () => {
+            clearUser();
+            updateAccountUI();
+        };
+        modalBg.onclick = (e) => {
+            if (e.target === modalBg) modalBg.style.display = 'none';
+        };
+        let isSignUp = false;
+        modalSwitch.onclick = () => {
+            isSignUp = !isSignUp;
+            if (isSignUp) {
+                modalTitle.textContent = 'Sign Up';
+                modalAction.textContent = 'Sign Up';
+                modalSwitch.textContent = 'Have an account? Sign In';
+            } else {
+                modalTitle.textContent = 'Sign In';
+                modalAction.textContent = 'Sign In';
+                modalSwitch.textContent = 'No account? Sign Up';
+            }
+            modalPassword.value = '';
+            modalUsername.value = '';
+        };
+        modalAction.onclick = () => {
+            const username = modalUsername.value.trim();
+            const password = modalPassword.value;
+            if (!username || !password) {
+                alert('Please enter username and password.');
+                return;
+            }
+            if (isSignUp) {
+                setUser({ username, password, avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=6a5acd&color=fff` });
+                alert('Account created! You are now signed in.');
+            } else {
+                const user = getUser();
+                if (user && user.username === username && user.password === password) {
+                    alert('Signed in!');
+                } else {
+                    alert('Invalid credentials. Try again or sign up.');
+                    return;
+                }
+            }
+            modalBg.style.display = 'none';
+            updateAccountUI();
+        };
+        // Settings
+        settingsBtn.onclick = () => {
+            settingsMenu.classList.toggle('show');
+            // Set selects to current values
+            fontSelect.value = localStorage.getItem('zypherFont') || 'Roboto';
+            qlLayout.value = localStorage.getItem('zypherQLLayout') || 'grid';
+            searchEngineSelect.value = localStorage.getItem('zypherSearchEngine') || 'https://www.google.com/search?q=';
+        };
+        themeToggle.onchange = () => {
+            document.body.classList.toggle('dark-mode', themeToggle.checked);
+            localStorage.setItem('theme', themeToggle.checked ? 'dark' : 'light');
+        };
+        fontSelect.onchange = () => {
+            document.body.style.fontFamily = `'${fontSelect.value}', 'Poppins', 'Roboto', 'Inter', sans-serif`;
+            localStorage.setItem('zypherFont', fontSelect.value);
+        };
+        qlLayout.onchange = () => {
+            quickLinks.className = qlLayout.value;
+            localStorage.setItem('zypherQLLayout', qlLayout.value);
+        };
+        searchEngineSelect.onchange = () => {
+            localStorage.setItem('zypherSearchEngine', searchEngineSelect.value);
+        };
+        clearDataBtn.onclick = () => {
+            localStorage.clear();
+            updateAccountUI();
+            alert('All data cleared!');
+            location.reload();
+        };
+        // Search
+        searchBtn.onclick = () => {
+            const query = searchBar.value.trim();
+            if (query) {
+                const searchEngine = searchEngineSelect.value;
+                window.location.href = `${searchEngine}${encodeURIComponent(query)}`;
+            }
+        };
+        searchBar.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') searchBtn.click();
+        });
+        // Quick Links
+        function renderQuickLinks() {
+            const links = JSON.parse(localStorage.getItem('quickLinks')) || [
+                { name: 'GitHub', url: 'https://github.com' },
+                { name: 'Google', url: 'https://google.com' },
+                { name: 'YouTube', url: 'https://youtube.com' },
+                { name: 'Twitter', url: 'https://twitter.com' },,
+                { name: 'LinkedIn', url: 'https://linkedin.com' },
+                { name: 'Reddit', url: 'https://reddit.com' },
+            ];
+            quickLinks.innerHTML = '';
+            links.forEach((link, idx) => {
+                const a = document.createElement('a');
+                a.href = link.url;
+                a.textContent = link.name;
+                a.target = '_blank';
+                // Remove button
+                const removeBtn = document.createElement('span');
+                removeBtn.textContent = '✖';
+                removeBtn.style.cursor = 'pointer';
+                removeBtn.style.marginLeft = '0.7rem';
+                removeBtn.style.fontSize = '1.1rem';
+                removeBtn.title = 'Remove';
+                removeBtn.onclick = (e) => {
+                    e.preventDefault();
+                    links.splice(idx, 1);
+                    localStorage.setItem('quickLinks', JSON.stringify(links));
+                    renderQuickLinks();
+                };
+                a.appendChild(removeBtn);
+                quickLinks.appendChild(a);
+            });
+            // Apply layout
+            quickLinks.className = localStorage.getItem('zypherQLLayout') || 'grid';
+        }
+        addLinkBtn.onclick = () => {
+            addLinkModalBg.style.display = 'flex';
+            addLinkName.value = '';
+            addLinkUrl.value = '';
+            addLinkName.focus();
+        };
+        addLinkCancel.onclick = () => {
+            addLinkModalBg.style.display = 'none';
+        };
+        addLinkModalBg.onclick = (e) => {
+            if (e.target === addLinkModalBg) addLinkModalBg.style.display = 'none';
+        };
+        addLinkSave.onclick = () => {
+            const name = addLinkName.value.trim();
+            const url = addLinkUrl.value.trim();
+            if (!name || !url) {
+                alert('Please enter both name and URL.');
+                return;
+            }
+            let links = JSON.parse(localStorage.getItem('quickLinks')) || [];
+            links.push({ name, url });
+            localStorage.setItem('quickLinks', JSON.stringify(links));
+            renderQuickLinks();
+            addLinkModalBg.style.display = 'none';
+        };
+        window.addEventListener('DOMContentLoaded', () => {
+            // Theme
+            const theme = localStorage.getItem('theme');
+            if (theme === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeToggle.checked = true;
+            }
+            // Font
+            const font = localStorage.getItem('zypherFont') || 'Roboto';
+            document.body.style.fontFamily = `'${font}', 'Poppins', 'Roboto', 'Inter', sans-serif`;
+            fontSelect.value = font;
+            // Quick Links Layout
+            const layout = localStorage.getItem('zypherQLLayout') || 'grid';
+            quickLinks.className = layout;
+            qlLayout.value = layout;
+            // Search Engine
+            const se = localStorage.getItem('zypherSearchEngine') || 'https://www.google.com/search?q=';
+            searchEngineSelect.value = se;
+            // Account
+            updateAccountUI();
+            // Quick Links
+            renderQuickLinks();
+        });
+    </script>
+</body>
+</html>
